@@ -1,0 +1,134 @@
+---
+title: "Exploring Statistics with R"
+author: "Matthias Bannert"
+date: "30 Oct 2015"
+output:
+  ioslides_presentation:
+    widescreen: yes
+runtime: shiny
+---
+
+## About Me 
+
+### Matthias Bannert
+- researcher / developer at ETH Zurich 
+- member of the iscience research group of Prof. Reips
+- studied economics in Constance
+- use R since 2006
+- develops packages since 2010
+- teaching at the ETH, University of Constance, Webdatanet Training School
+
+
+
+## Course Poll
+```{r,echo=FALSE}
+source("../lib/bullet.R")
+library(grid)
+library(shiny)
+
+
+fluidPage(sidebarLayout(sidebarPanel(
+  numericInput("members", "Number of participants", 17),
+  numericInput("html", "R", 17),
+  numericInput("json", "R Studio", 17),
+  numericInput("rstats", "Markdown / LaTeX", 17)  
+  ),
+  mainPanel(
+    renderPlot({
+      techavg <- mean(c(input$html,input$json,input$rstats) / input$members)*100
+  df1 <- data.frame(units = c("R(%)","R Studio(%)","Markdown(%)"),
+                    low = c(25,25,25),
+                    mean = c(50,50,50),
+                    high = c(100,100,100),
+                    target = c(techavg,techavg,techavg),
+                    value = c(100*(input$html/input$members),
+                              100*(input$json/input$members),
+                              100*(input$rstats/input$members)
+                              )
+                    )
+
+  g <- gridBulletGraphH(df1,bcol = c("#999999","#CCCCCC","#E1E1E1"),
+                   vcol = "#333333",font = 20)
+
+  g + title(paste("Usage of Technologies Among Participants", sep=" "))
+
+})  
+
+
+    )
+  ))
+```
+
+## Why Code?
+### When I all I need is psuhing buttons?
+
+<!-- insert an xbox -->
+
+
+## Because ...
+
+- it's reproducible
+- you can automate things
+- we can actually understand what's going on
+- it's more flexible
+
+
+## How Can this Course Get Us Started?
+
+### Live Examples
+- Understanding: BP Test
+- Reproducible Research: Render a paper with knitr
+- Interactive Documents with Markdown: this presentation
+- Interactive Web Applications (shiny gallery, showmeshiny)
+- Tweet Mining / Text Mining
+
+<!-- Break / form teams -->
+
+## The R Ecosystem
+- R Interpreter (the program you get from r-project.org)
+- Language: R Language for Statistical Computer
+- Editor / IDE: R Studio, Sublime, Notepad+, Text Wrangler
+- Markdown
+- CRAN
+- SO tagged rstats: Q+A Forum
+- ...
+
+## R Studio in a Nutshell
+- Console
+- Script Window
+- File Browser
+- Plot
+- Help
+- Auto Complete
+- Projects
+
+##  Important R Objects
+- vector
+- matrix
+- data.frame
+- list
+
+## Important R Concepts
+- global environment
+- pass by value
+- basic operators ("<-","")
+
+## Task I 
+1. Create a markdown documentation of today's session
+2. Commment on important things
+3. Don't forget object types vector, matrix, data.frame, list
+4. Collect a few helpful commands and explain them.
+5. Show basic descriptive statistics for the **mtcars** dataset
+6. Render it to .pdf
+
+Homework: Present a dataset.
+
+
+
+
+
+
+
+
+
+
