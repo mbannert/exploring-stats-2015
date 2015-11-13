@@ -1,0 +1,60 @@
+\documentclass{article}
+
+\title{A Dynamic Document with R and \LaTeX}
+\author{Matthias Bannert}
+
+%%% MAYBE SHOW SOME REAL PAPERS, pdf of papers !
+
+\begin{document}
+\maketitle
+
+\newpage
+
+\section{Some Text}
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin velit erat, vestibulum non posuere sit amet, ornare sit amet turpis. Duis congue, risus et malesuada sollicitudin, ante sapien vulputate eros, vitae accumsan quam mauris vel sapien. Etiam velit massa, rhoncus et rutrum sit amet, iaculis non nibh. Donec vitae lectus odio. Ut ullamcorper quis enim non hendrerit. In turpis dolor, consectetur et massa eget, porta laoreet orci. Maecenas fringilla ipsum eget eros suscipit volutpat. Sed in odio orci. Curabitur leo nisl, pharetra non laoreet nec, viverra eget tortor. Vivamus vestibulum, risus vitae varius mattis, velit quam dictum urna, vel sagittis dui augue auctor lacus. Nam non magna dolor.
+
+\section{First Section}
+
+Let's use the example of the Breusch Pagan test we have seen before... 
+
+<<first,echo=FALSE>>=
+# Programming can help to improve understanding
+
+## generate a regressor
+x <- rep(c(-1,1), 50)
+## generate heteroskedastic and homoskedastic disturbances
+err1 <- rnorm(100, sd=rep(c(1,10), 50))
+err2 <- rnorm(100)
+
+# whatch the labels of the axes !
+hist(err1,breaks=15)
+hist(err2,breaks=15)
+@
+
+The test results are also created dynamically. 
+
+<<example,echo = FALSE,message=FALSE>>=
+library(lmtest)
+## generate a linear relationship
+y1 <- 1 + x + err1
+y2 <- 1 + x + err2
+## perform Breusch-Pagan test
+bptest(y1 ~ x)
+bptest(y2 ~ x)
+
+@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}

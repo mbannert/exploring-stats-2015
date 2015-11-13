@@ -1,0 +1,24 @@
+---
+title: "takeaways"
+author: "Matthias Bannert"
+date: "30 Oct 2015"
+output: pdf_document
+---
+
+# session 1 take aways / what should be repeated
+
+- you don't save data in a program, you save data in a file
+- you know about basic R objects now
+- write data to file
+- the ecosystem... 
+- explore a dataset
+
+# more
+- implications of the vector format
+- get the transition to doin some stats
+- real world problems
+- how to find out about a method
+- installl and load packages
+- help.start()
+
+

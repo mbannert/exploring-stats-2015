@@ -14,11 +14,9 @@ runtime: shiny
 - researcher / developer at ETH Zurich 
 - member of the iscience research group of Prof. Reips
 - studied economics in Constance
-- use R since 2006
+- uses R since 2006
 - develops packages since 2010
 - teaching at the ETH, University of Constance, Webdatanet Training School
-
-
 
 ## Course Poll
 ```{r,echo=FALSE}
@@ -26,17 +24,16 @@ source("../lib/bullet.R")
 library(grid)
 library(shiny)
 
-
 fluidPage(sidebarLayout(sidebarPanel(
-  numericInput("members", "Number of participants", 17),
-  numericInput("html", "R", 17),
-  numericInput("json", "R Studio", 17),
-  numericInput("rstats", "Markdown / LaTeX", 17)  
+  numericInput("members", "Number of participants", 8),
+  numericInput("html", "R", 8),
+  numericInput("json", "LaTeX", 8),
+  numericInput("rstats", "Markdown", 8)  
   ),
   mainPanel(
     renderPlot({
       techavg <- mean(c(input$html,input$json,input$rstats) / input$members)*100
-  df1 <- data.frame(units = c("R(%)","R Studio(%)","Markdown(%)"),
+  df1 <- data.frame(units = c("R(%)","LaTeX (%)","MD(%)"),
                     low = c(25,25,25),
                     mean = c(50,50,50),
                     high = c(100,100,100),
@@ -59,41 +56,7 @@ fluidPage(sidebarLayout(sidebarPanel(
   ))
 ```
 
-## Why Code?
-### When I all I need is psuhing buttons?
-
-<!-- insert an xbox -->
-
-
-## Because ...
-
-- it's reproducible
-- you can automate things
-- we can actually understand what's going on
-- it's more flexible
-
-
-## How Can this Course Get Us Started?
-
-### Live Examples
-- Understanding: BP Test
-- Reproducible Research: Render a paper with knitr
-- Interactive Documents with Markdown: this presentation
-- Interactive Web Applications (shiny gallery, showmeshiny)
-- Tweet Mining / Text Mining
-
-<!-- Break / form teams -->
-
-## The R Ecosystem
-- R Interpreter (the program you get from r-project.org)
-- Language: R Language for Statistical Computer
-- Editor / IDE: R Studio, Sublime, Notepad+, Text Wrangler
-- Markdown
-- CRAN
-- SO tagged rstats: Q+A Forum
-- ...
-
-## R Studio in a Nutshell
+## Interactive: Sneak Preview R and RStudio
 - Console
 - Script Window
 - File Browser
@@ -102,33 +65,38 @@ fluidPage(sidebarLayout(sidebarPanel(
 - Auto Complete
 - Projects
 
-##  Important R Objects
-- vector
-- matrix
-- data.frame
-- list
+## Why Code? 
+<img src="busy.png" width="600px">
 
-## Important R Concepts
-- global environment
-- pass by value
-- basic operators ("<-","")
+## Because ...
 
-## Task I 
-1. Create a markdown documentation of today's session
-2. Commment on important things
-3. Don't forget object types vector, matrix, data.frame, list
-4. Collect a few helpful commands and explain them.
-5. Show basic descriptive statistics for the **mtcars** dataset
-6. Render it to .pdf
-
-Homework: Present a dataset.
+- it's reproducible
+- you can automate things
+- we can actually understand what's going on
+- it's more flexible
+- ...
 
 
+## Live Examples
+- Understanding: BP Test
+- Reproducible Research: Render a paper with knitr  / this presentation
+- Interactive Web Applications (shiny gallery, showmeshiny)
+- Tweet Mining / Text Mining
 
 
+<!-- Break / form teams -->
 
+## The R Ecosystem
+<img src="mindmap.png" width="750px">
 
-
+## Interactive: Basics
 
 
 
+## Markdown
+- not a programming language
+- solely formatting ("dumb language"), write "hello" it will return "hello".
+- .md, .Rmd file extensions
+
+
+## Interactive: Create an own Markdown document

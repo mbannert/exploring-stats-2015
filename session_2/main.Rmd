@@ -1,0 +1,148 @@
+---
+title: "Exploring Statistics with R"
+author: "Matthias Bannert"
+date: "8 Nov 2015"
+output: ioslides_presentation
+---
+
+## Task A: Load the Data
+
+Load EITHER the mtcars dataset (easy), the mlb dataset (medium) or
+the KOF Businuess situation (hard) into R.
+
+a) mtcars: data(mtcars)
+b) mlb: Ilias mlb.RData
+c) KOF:
+https://datenservice.kof.ethz.ch/api/sets/ds_bs_monthly?mime=csv
+
+
+## Task A C'd: Basic Report
+
+* Which variables are in the dataset?
+* What's the size (rows,cols) of your dataset?
+* Which is the most/least economic car (1), who is the tallest/shortest player (2), which is the best/worth month in total (3)?
+* Provide some summary statistics such as means quantiles etc?
+* What about the correlation structure of your data set? Inspect visually. What can you see? (hint: see pairs(),cor() and image())
+* Form an interesting sub groups and compare means in these subgroups.
+(hint: factor variables are good starting point)
+
+
+## Getting Efficient
+- functions
+- anymous functions (functions without a name)
+- the apply family
+
+## Parts of a Function
+- name
+- body
+- arguments 
+
+Besides: try to understand the concept of **scope** from the
+very beginning. 
+
+<!-- Let's build a basic function -->
+
+
+## The Apply Family
+- lapply
+- sapply
+- apply (beware of matrix coercion!!)
+- ... 
+
+Idea: Run a function on every element of the other argument.
+
+<!-- Lapply in action -->
+
+<!-- Comparing Groups
+- t.test
+- boxplot with notches
+- the formula syntax
+-->
+
+## A Quick Glimpse at R's lm Function
+- part of stats package (comes with core installation)
+- formula syntax
+- data parameter works well with data.frames
+- returns object of class lm
+- comprehensive summary method
+- see also glm() for the generalized linear model
+
+## Math Refresher: OLS coefficients
+$$
+  Y = X\beta + e \\
+  e = Y - X\beta \\
+  e'e = (Y' - \beta'X')(Y - X\beta) \\
+  = Y'Y - Y'X\beta - \beta'X'Y + \beta'X'X\beta \\
+  = Y'Y - 2Y'X\beta + \beta'X'X\beta \\
+  \frac{\partial e'e}{\partial \beta} = -2X'Y + 2\beta X'X
+$$
+
+set to zero:
+$$
+  2X'Y = 2\beta X'X \\
+  \beta = (X'X)^{-1}X'Y
+$$
+
+## Implementation: What Operations do we need? 
+
+- transpose
+- matrix multiplication
+- invert matrix / solve equation
+
+## Start a Custom Linear Model Fit Function 
+- make sure input is numeric
+- add an intercept to the data
+- what is the input (arguments)?
+- what will the output look like?
+- what is a suitable name for the function (naming conventions)?
+
+
+<!-- Saturday Lunch -->
+
+## Weedsmoking in Utopia
+Let's consider the following admittedly far fetched example in which grade point average is only determined by a handful of variables. Note that some of these variables are not directly observable to the researcher.
+
+- weedsmoking: binary indicator for regular weed consumption
+- weedsmokingstar: grams consumed
+- parents: binary indicator for alarming parental background
+- lazy: laziness score
+- sport: sportiness score
+- distance: distance to Amsterdam from where student grows up (instrument)
+
+
+## Utopia Potheads: The True Model
+$$
+  gpa = 7.8 - 0.2*weedsmoking - 0.2 * parents \\
+        - 0.15 * sport - 0.4 * lazy + u
+$$
+
+and 
+
+$$
+weedsmokingstar = -3.5+2.5*parents-0.25*sport + \\
+  1.2*lazy-0.01*distance+error 
+$$
+
+with weedsmoking = 0, if weedsmokingstar < 6, else weedsmoking = 1.
+
+
+## Texreg 
+```{r,echo=FALSE,message=FALSE}
+library(texreg)
+fit1 <- lm(mpg~am+vs,data=mtcars)
+fit2 <- lm(mpg~am+vs+wt,data=mtcars)
+```
+
+```{r,results='asis',warning=FALSE,message=FALSE,echo=FALSE}
+htmlreg(list(fit1,fit2))
+```
+
+
+
+
+
+
+
+
+
+
