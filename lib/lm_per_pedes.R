@@ -8,15 +8,21 @@
 #' @param intercept logical
 #' @return matrix
 fitLM <- function(Y,X,intercept=T){
+  X <- as.matrix(X)
   # remember (X'X)^-1(X'Y)
-  if(intercept) X <- cbind(rep(1,nrow(X)),X)
+  if(intercept){
+    X <- cbind(rep(1,nrow(X)),X)
+  } 
   bhat <- solve(t(X) %*% X) %*% (t(X) %*% Y)
   rownames(bhat)[1] <- "Intercept"
   bhat
 
 }
 
-fitLM(B,A)
+fitLM(mtcars$mpg,mtcars[,-1])
+lm(mpg~.,data=mtcars)
+
+
 
 # ## Calculate vector of residuals
 # res = as.matrix(women$weight-bh[1]-bh[2]*women$height)
