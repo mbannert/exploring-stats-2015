@@ -1,0 +1,273 @@
+---
+title: "Exploring Statistics with R"
+author: "Matthias Bannert"
+date: "11 Dec 2015"
+output: ioslides_presentation
+
+---
+
+## Likert Scale Visualization Example
+
+```{r,echo=FALSE,message=FALSE,fig.height=2}
+library(likert)
+library(reshape2)
+
+load("../data/pisa_tabbed.RData")
+ptab <- acast(tab, ST04Q01 ~ ST62Q13, value.var = "Percentage")
+ddat <- data.frame(Item = rownames(ptab), ptab)
+
+# plot it with the likert package
+likert.bar.plot(likert(summary = ddat), center = 2) + ggtitle("Declarative Fraction") + 
+  theme_bw()
+
+```
+
+## Histograms with ggplot2
+
+```{r,echo=FALSE,message=FALSE}
+require(ggplot2)
+# read our big5 data set
+big5 <- read.csv2("../data/BIG5/data.csv",sep="\t")
+
+# let's select some countries... 
+# mention the :: syntax
+big5$country <- plyr::revalue(big5$country,
+                              c("US" = "USA",
+                                "DE" = "Germany",
+                                "CA" = "Canada",
+                                "CN" = "China",
+                                "ES" = "Spain",
+                                "FR" = "France")
+)
+
+# set up the ggplot object
+countries <- ggplot(data = big5) 
+
+# the point geom
+# countries + geom_point(aes(country,age))
+
+# maybe we should remove ugly outliers...
+big5 <- subset(big5 ,age < 120)
+countries <- ggplot(data = big5) 
+
+# the layer by layer thing... 
+c_h <- countries +
+  geom_histogram(aes(x = age,
+                     y = ..density..),
+                 binwidth=1,
+                 colour="black",
+                 fill="white")
+# add a density
+library(ggthemes)
+c_h_d  <- c_h +
+  geom_density(aes(x = age),
+               alpha = .2,fill = "green") + theme_bw()
+
+c_h_d_m <- c_h_d + 
+  geom_vline(aes(xintercept = mean(age, na.rm=T)),
+             color="red", linetype="dashed", size=1) +
+  theme_bw()
+
+c_h_d_m
+
+library(ggmap)
+world_map <- map_data("world")
+
+library(dplyr)
+
+grpd_cntry <- group_by(na.omit(big5),country)
+aggregated <- summarize(grpd_cntry,
+          E1_mean = mean(E1))
+
+full_countries <- merge(aggregated,world_map,by.x = "country",
+                        by.y = "region",all.y = T)
+
+full_countries_sel <- merge(aggregated,world_map,by.x = "country",
+                        by.y = "region")
+
+
+```
+
+## Maps with ggplot2
+```{r,echo=FALSE}
+info <- ggplot(full_countries, aes(map_id = country))
+info + 
+  geom_map(aes(fill = E1_mean),
+           map = world_map,
+           color ="white") + 
+  expand_limits(x = world_map$long, y = world_map$lat) +
+  scale_fill_gradient(low="black", high="blue") +
+  theme_bw() + theme_tufte() +
+  coord_map(xlim=c(-180,180))
+
+```
+
+
+
+## Maps with GoogleVis
+
+```{r setOptions, message=FALSE,echo=FALSE}
+library(googleVis)
+op <- options(gvis.plot.tag='chart')
+```
+
+```{r ComboExample, results='asis', tidy=FALSE,echo=FALSE}
+## Add the mean
+unq_info <- unique(full_countries_sel[,c("country","E1_mean")])
+unq_info$country <- droplevels(unq_info$country)
+levels(unq_info$country)[6] <- "United States"
+
+G <- gvisGeoChart(unq_info, "country", "E1_mean", 
+                  options=list(width=400, height=400))
+plot(G)
+```
+
+## Overview
+
+- Repetition
+- regular expressions 
+- HWA
+- Some advanced plots (ggplot2)
+- Factor analysis
+- solving assignments
+
+# Basic Data Types
+```{r,eval=FALSE}
+# vector
+a_vector <- c(1,3,45,43)
+# matrix
+m <- matrix(1:4,nrow = 2)
+# matrix
+dframe <- data.frame(a = c(1,2,3), b=c(3,2,1))
+# list
+list(a_vector,m,dframe)
+```
+
+## Basic Commands
+
+```{r,eval=FALSE}
+# install libs, load libs
+install.packages("ggplot2")
+library(ggplot2)
+# load,save,read,write
+load("somefile.RData")
+save("object1","object2",file="somefile.RData")
+# workspace
+ls()
+rm(list=ls())
+# data
+head()
+tail()
+summary()
+table()
+c()
+t()
+mean()
+sd()
+var()
+# ... 
+```
+
+## Apply / Lapply
+```{r,eval= FALSE}
+# apply function to every element of a list
+lapply(l,class)
+# row wise anonymous function
+apply(x,1,function(x) sum(x)-1)
+```
+
+
+## Basic Plots
+```{r,eval=FALSE}
+# scatterplot
+plot(x,y)
+# histogram
+hist(x)
+# boxplot
+boxplot(x ~ somecategory)
+# pairwise scatterplot
+pairs(dataframe)
+```
+
+## Simulate Data 
+```{r,eval=FALSE}
+rnorm(1000)
+rbinom(100,2,.5)
+rexp(...)
+rgamma(...)
+rcauchy(...)
+rt(...)
+# ...
+```
+
+## Regressions and Testing
+```{r,eval=FALSE}
+# basic fit formula syntax
+fit1 <- lm(y~x1 + x2,data)
+# standard output
+summary(fit1)
+
+# tests
+t.test(x,y)
+t.test(x ~ categorical_var)
+library(lmtest)
+# heterosked.
+bptest()
+
+```
+
+## knitr / markdown
+
+```{r,eval=FALSE}
+htmlreg(fit1)
+texreg(fit1)
+kable(dataframe)
+
+```
+
+<!-- break !!-->
+
+## HAVE a BREAK 
+
+## Regular Expression
+
+- matching based on patterns
+- available in many programming languages
+- pattern definition can become complex but is very powerful
+- great resources: [Regxr](http://regexr.com/), [regex101](https://regex101.com)
+
+
+## HWA
+
+- questions, problems? 
+
+
+## ggplot2 
+
+- grammar of graphics / layer by layer
+- advanced plotting library for pdf, png etc. 
+- most popular among non-interactive charts
+- interactive charts: googleVis, rCharts, ggvis, ... 
+(plotting most often done with javascript)
+- [Hadley Wickham](http://had.co.nz/) (R Studio chief data scientist)
+- great documentation: [ggplot2](http://docs.ggplot2.org/current/)
+- ggplot2 book: [ggplot2 book](http://ggplot2.org/book/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
